@@ -17,9 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using MonoTouch.UIKit;
+using UIKit;
 using System.Reflection;
-using MonoTouch.Foundation;
+using Foundation;
 
 namespace Praeclarum.UI
 {
@@ -272,9 +272,9 @@ namespace Praeclarum.UI
 
 	public static class AttributedStringEx
 	{
-		public static MonoTouch.Foundation.NSAttributedString ToAttributedString (this string html)
+		public static NSAttributedString ToAttributedString (this string html)
 		{
-			return new MonoTouch.Foundation.NSMutableAttributedString (html);
+			return new NSMutableAttributedString (html);
 		}
 	}
 }

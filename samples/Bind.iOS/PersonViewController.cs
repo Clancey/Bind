@@ -1,9 +1,8 @@
-﻿using System;
-using MonoTouch.UIKit;
-
+using System;
+using UIKit;
 using Praeclarum.Bind;
 using Praeclarum.UI;
-using MonoTouch.CoreGraphics;
+using CoreGraphics;
 
 namespace Bind.iOS.Sample
 {

@@ -1,0 +1,20 @@
+﻿<Properties StartupConfiguration="{4366666B-C24B-4E17-B611-D6D530EA41A3}|Default">
+  <MonoDevelop.Ide.ItemProperties.Bind.iOS.Sample PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.75D5060E-3E9D-4714-8D39-C37BBEE55F64" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Bind.iOS/Layout.cs">
+    <Files>
+      <File FileName="../src/Bind.cs" Line="554" Column="27" />
+      <File FileName="Bind.iOS/PeopleViewController.cs" Line="3" Column="7" />
+      <File FileName="Bind.iOS/PersonTableViewCell.cs" Line="3" Column="7" />
+      <File FileName="Bind.iOS/Main.cs" Line="20" Column="1" />
+      <File FileName="Bind.iOS/AppDelegate.cs" Line="3" Column="7" />
+      <File FileName="Bind.iOS/PersonViewController.cs" Line="5" Column="7" />
+      <File FileName="Bind.iOS/Layout.cs" Line="22" Column="7" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

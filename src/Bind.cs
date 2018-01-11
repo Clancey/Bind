@@ -541,21 +541,21 @@ namespace Praeclarum.Bind
 	}
 
 	#if __IOS__
-	[MonoTouch.Foundation.Preserve]
+	[Foundation.Preserve]
 	static class PreserveEventsAndSettersHack
 	{
-		[MonoTouch.Foundation.Preserve]
+		[Foundation.Preserve]
 		static void Hack ()
 		{
-			var l = new MonoTouch.UIKit.UILabel ();
+			var l = new UIKit.UILabel ();
 			l.Text = l.Text + "";
 
-			var tf = new MonoTouch.UIKit.UITextField ();
+			var tf = new UIKit.UITextField ();
 			tf.Text = tf.Text + "";
 			tf.EditingDidEnd += delegate {};
 			tf.ValueChanged += delegate {};
 
-			var vc = new MonoTouch.UIKit.UIViewController ();
+			var vc = new UIKit.UIViewController ();
 			vc.Title = vc.Title + "";
 			vc.Editing = !vc.Editing;
 		}
