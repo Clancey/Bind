@@ -16,6 +16,7 @@ namespace Bind.iOS.Sample
 		UIButton bindButton;
 
 		Binding binding;
+		Command buttonCommand;
 
 		public PersonViewController (Person person)
 		{
@@ -27,7 +28,7 @@ namespace Bind.iOS.Sample
 					new UIAlertView ("", "Good job, " + person.FullName, null, "OK").Show ();
 				});
 		}
-
+		Binding buttonBinding;
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
@@ -38,7 +39,9 @@ namespace Bind.iOS.Sample
 			bindButton = UIButton.FromType (UIButtonType.RoundedRect);
 			bindButton.SetTitle ("Bind", UIControlState.Normal);
 			bindButton.Selected = true;
-			bindButton.TouchUpInside += HandleBindButton;
+			//bindButton.TouchUpInside += HandleBindButton;
+			buttonCommand = new Command(() => HandleBindButton(this, EventArgs.Empty));
+			buttonBinding = bindButton.Bind(nameof(UIButton.TouchUpInside), buttonCommand);
 
 			firstNameEdit = new UITextField {
 				BorderStyle = UITextBorderStyle.RoundedRect,

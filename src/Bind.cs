@@ -20,6 +20,7 @@ using System.Linq;
 using System.Reflection;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Praeclarum.Bind
 {
@@ -540,6 +541,114 @@ namespace Praeclarum.Bind
 		}
 	}
 
+	class EventBinding : Binding
+	{
+
+		Command command;
+		EventInfo eventInfo;
+		Delegate @delegate;
+		public EventBinding(object obj, string eventName, Command command)
+		{
+			var type = obj.GetType();
+			eventInfo = type.GetEvent(eventName);
+			@delegate = eventInfo.Create(() => command.Execute(obj));
+			eventInfo.AddEventHandler(obj, @delegate);
+		}
+
+		public override void Unbind()
+		{
+			eventInfo.RemoveEventHandler(this, @delegate);
+			base.Unbind();
+		}
+
+	}
+
+	public class Command : ICommand
+	{
+		readonly Func<object, bool> _canExecute;
+		readonly Action<object> _execute;
+
+		public Command(Action<object> execute)
+		{
+			if (execute == null)
+				throw new ArgumentNullException(nameof(execute));
+
+			_execute = execute;
+			EventHandler = (s, e) =>
+			{
+				Execute(s);
+			};
+		}
+
+		public Command(Action execute) : this(o => execute())
+		{
+			if (execute == null)
+				throw new ArgumentNullException(nameof(execute));
+		}
+
+		public Command(Action<object> execute, Func<object, bool> canExecute) : this(execute)
+		{
+			if (canExecute == null)
+				throw new ArgumentNullException(nameof(canExecute));
+
+			_canExecute = canExecute;
+		}
+
+		public Command(Action execute, Func<bool> canExecute) : this(o => execute(), o => canExecute())
+		{
+			if (execute == null)
+				throw new ArgumentNullException(nameof(execute));
+			if (canExecute == null)
+				throw new ArgumentNullException(nameof(canExecute));
+		}
+
+		public bool CanExecute(object parameter)
+		{
+			if (_canExecute != null)
+				return _canExecute(parameter);
+
+			return true;
+		}
+
+		public event EventHandler CanExecuteChanged;
+
+		public void Execute(object parameter)
+		{
+			_execute(parameter);
+		}
+
+		public void ChangeCanExecute()
+		{
+			EventHandler changed = CanExecuteChanged;
+			changed?.Invoke(this, EventArgs.Empty);
+		}
+		protected event EventHandler EventHandler;
+		public static implicit operator EventHandler(Command command)
+		{
+			return command.EventHandler;
+		}
+		internal void Bind(EventHandler evt)
+		{
+			EventHandler = evt;
+		}
+	}
+
+	public static class BindingExtensions
+	{
+		public static Binding Bind(this object obj, string eventName, Command command)
+		{
+			return new EventBinding(obj, eventName, command);
+		}
+		public static Delegate Create(this EventInfo e, Action a)
+		{
+			var parameters = e.EventHandlerType.GetMethod("Invoke").GetParameters().Select(p => Expression.Parameter(p.ParameterType, "p")).ToArray();
+			var method = a.GetType().GetMethod("Invoke");
+			var exp = Expression.Call(Expression.Constant(a), a.GetType().GetMethod("Invoke"));
+			var l = Expression.Lambda(exp, parameters);
+			return Delegate.CreateDelegate(e.EventHandlerType, l.Compile(), "Invoke", false);
+		}
+	}
+
 	#if __IOS__
 	[Foundation.Preserve]
 	static class PreserveEventsAndSettersHack
@@ -558,6 +667,12 @@ namespace Praeclarum.Bind
 			var vc = new UIKit.UIViewController ();
 			vc.Title = vc.Title + "";
 			vc.Editing = !vc.Editing;
+
+			var button = new UIKit.UIButton();
+			EventHandler del = (object s, EventArgs e) => {
+			};
+			button.TouchUpInside += del;
+			button.TouchUpInside -= del;
 		}
 	}
 	#endif
